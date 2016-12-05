@@ -61,30 +61,21 @@ app.get('/', function(req, res)
 	}
 	else {
         logged = false;
-    	text = 'You are not authorized to view this page';
   	}
 
 	bind.toFile('tpl/index.tpl', logged?values:defaulValues, function(data){
         res.writeHead(200, {'Content-Type':'text/html'});
 		res.end(data);
     });
-	/*var text = "";
-	
-	
-	
-	//write res
-	res.writeHead(200, {'Content-Type': 'text/html'});	
-    res.end(text);*/
   	
 });
 
 /**
- * @brief log in page, thia page will create a session if it is not present ( i.e. it will log in a user)
+ * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
  * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
  */
 app.get('/login', function(req, res) 
 {
-	var text = "";
 	
 	//check if the session exists
 	if (req.session.user_id != null) 

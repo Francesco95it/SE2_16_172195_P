@@ -10,7 +10,7 @@
             <h1>Servizio Pasti Trento</h1>
             <h2>Benvenuto (:name:)</h2>
             <div class="internalDiv">
-                <button class="btnEnter" onClick="/login">Entra!</button>
+                <a class="btnEnter" href="/login">Entra!</a>
             </div>
         </div>
         
