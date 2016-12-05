@@ -38,7 +38,7 @@ app.get('/style.css', function (req, res) {
 });
 
 var defaulValues={
-    name='Ospite'
+    name:'ospite'
 };
 var values={
     

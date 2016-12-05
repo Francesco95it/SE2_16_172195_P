@@ -7,10 +7,10 @@
     </head>
     <body>
         <div class="mainDiv">
-            <h1>Servizio Pasti Trento</h1><br>
+            <h1>Servizio Pasti Trento</h1>
             <h2>Benvenuto (:name:)</h2>
             <div class="internalDiv">
-                <button onClick="/login">Entra!</button>            
+                <button class="btnEnter" onClick="/login">Entra!</button>
             </div>
         </div>
         
