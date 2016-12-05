@@ -28,6 +28,8 @@ app.use(session({
 	cookie: { maxAge: 60000 }
 }));
 
+defaultVal={};
+
 /**
  * @brief main page, it will check if the user is logged in and print his name
  * @return a page with greetings to user if he/she is logged in, a page with a string that notify the user that he/so is not ogged in yet
@@ -37,7 +39,7 @@ app.get('/', function(request, response)
 
 
 	bind.toFile('tpl/index.tpl', defaultVal, function(data){
-        	res.writeHead(200, {'Content-Type':'text/html'});
+        res.writeHead(200, {'Content-Type':'text/html'});
 		res.end(data);
     });
 	/*var text = "";
