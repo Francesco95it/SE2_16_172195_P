@@ -28,6 +28,15 @@ app.use(session({
 	cookie: { maxAge: 60000 }
 }));
 
+
+app.get('/scripts.js', function (req, res) {
+    res.sendFile('scripts/scripts.js', {root:__dirname});
+});
+
+app.get('/style.css', function (req, res) {
+    res.sendFile('tpl/style.css', {root:__dirname});
+});
+
 defaultVal={};
 
 /**
