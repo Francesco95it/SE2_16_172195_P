@@ -37,30 +37,39 @@ app.get('/style.css', function (req, res) {
     res.sendFile('tpl/style.css', {root:__dirname});
 });
 
-defaultVal={};
+var defaulValues={
+    name='Ospite'
+};
+var values={
+    
+};
 
 /**
- * @brief main page, it will check if the user is logged in and print his name
- * @return a page with greetings to user if he/she is logged in, a page with a string that notify the user that he/so is not ogged in yet
+ * @brief main page, provides website presentation and a way to log-in or to go into the dashboard if logged in
+ * @return the index.tpl page like it is normally
  */
 app.get('/', function(req, res) 
 {
+    var logged;
+	//check if the session exists
+	if (req.session.user_id!=null) {
+		//print the greetings with the content of the session
+        logged = true;
+		values={
+            name: req.session.user_id
+        };
+	}
+	else {
+        logged = false;
+    	text = 'You are not authorized to view this page';
+  	}
 
-
-	bind.toFile('tpl/index.tpl', defaultVal, function(data){
+	bind.toFile('tpl/index.tpl', logged?values:defaulValues, function(data){
         res.writeHead(200, {'Content-Type':'text/html'});
 		res.end(data);
     });
 	/*var text = "";
 	
-	//check if the session exists
-	if (req.session.user_id!=null) {
-		//print the greetings with the content of the session
-		text = 'Hello ' + req.session.user_id;		
-	}
-	else {
-    	text = 'You are not authorized to view this page';
-  	}
 	
 	
 	//write res
