@@ -34,7 +34,7 @@ defaultVal={};
  * @brief main page, it will check if the user is logged in and print his name
  * @return a page with greetings to user if he/she is logged in, a page with a string that notify the user that he/so is not ogged in yet
  */
-app.get('/', function(request, response) 
+app.get('/', function(req, res) 
 {
 
 
@@ -45,18 +45,18 @@ app.get('/', function(request, response)
 	/*var text = "";
 	
 	//check if the session exists
-	if (request.session.user_id!=null) {
+	if (req.session.user_id!=null) {
 		//print the greetings with the content of the session
-		text = 'Hello ' + request.session.user_id;		
+		text = 'Hello ' + req.session.user_id;		
 	}
 	else {
     	text = 'You are not authorized to view this page';
   	}
 	
 	
-	//write response
-	response.writeHead(200, {'Content-Type': 'text/html'});	
-    response.end(text);*/
+	//write res
+	res.writeHead(200, {'Content-Type': 'text/html'});	
+    res.end(text);*/
   	
 });
 
@@ -64,41 +64,41 @@ app.get('/', function(request, response)
  * @brief log in page, thia page will create a session if it is not present ( i.e. it will log in a user)
  * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
  */
-app.get('/login', function(request, response) 
+app.get('/login', function(req, res) 
 {
 	var text = "";
 	
 	//check if the session exists
-	if (request.session.user_id != null) 
+	if (req.session.user_id != null) 
 	{
     	text = 'You are already logged in';
   	}
 	else
 	{
 		text = 'logged in';
-		request.session.user_id = "Francesco";
-    	//response.redirect('/my_secret_page');
+		req.session.user_id = "Francesco";
+    	//res.redirect('/my_secret_page');
 		
 	}
 	
-	//write response
-	response.writeHead(200, {'Content-Type': 'text/html'});	
-    response.end(text);
+	//write res
+	res.writeHead(200, {'Content-Type': 'text/html'});	
+    res.end(text);
 });
 
 /**
  * @brief log out page
  * @return a page with notification that user is logged out, or a page which says that the user is already logged out.
  */
-app.get('/logout', function(request, response) 
+app.get('/logout', function(req, res) 
 {
 	var text = "";
 	
 	//check if the session exists
-	if (request.session.user_id !=null) 
+	if (req.session.user_id !=null) 
 	{
     	text = 'logged out';
-		request.session.user_id = null;
+		req.session.user_id = null;
   	}
 	else
 	{
@@ -106,9 +106,9 @@ app.get('/logout', function(request, response)
 		
 	}
 	
-	//write response
-	response.writeHead(200, {'Content-Type': 'text/html'});	
-    response.end(text);
+	//write res
+	res.writeHead(200, {'Content-Type': 'text/html'});	
+    res.end(text);
 });
 
 
