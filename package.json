@@ -1,0 +1,22 @@
+{
+  "name": "se2_16_172195_p",
+  "version": "1.0.0",
+  "description": "project pasti",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "node index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Francesco95it/SE2_16_172195_P.git"
+  },
+  "author": "francesco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Francesco95it/SE2_16_172195_P/issues"
+  },
+  "homepage": "https://github.com/Francesco95it/SE2_16_172195_P#readme"
+}
