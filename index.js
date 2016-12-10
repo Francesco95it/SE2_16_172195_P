@@ -11,6 +11,8 @@ var util = require('util');
 
 var bind = require('bind');
 
+var connString = 'postgres://golapeatakjkcv:c2a37d36c3cfdaf68f1c516133ffe7d01a450ca45b14b3e9e2506a599e1483d0@ec2-23-21-169-238.compute-1.amazonaws.com:5432/dba7n4n8sgegn?ssl=true' || process.env.DATABASE_URL;
+
 //POST
 var bodyParser = require('body-parser');
 
@@ -37,12 +39,6 @@ app.get('/style.css', function (req, res) {
     res.sendFile('tpl/style.css', {root:__dirname});
 });
 
-var defaulValues={
-    name:'ospite'
-};
-var values={
-    
-};
 
 /**
  * @brief main page, provides website presentation and a way to log-in or to go into the dashboard if logged in
@@ -50,6 +46,12 @@ var values={
  */
 app.get('/', function(req, res) 
 {
+    var defaultValues={
+        name:'ospite'
+    };
+    var values={
+
+    };
     var logged;
 	//check if the session exists
 	if (req.session.user_id!=null) {
@@ -63,7 +65,7 @@ app.get('/', function(req, res)
         logged = false;
   	}
 
-	bind.toFile('tpl/index.tpl', logged?values:defaulValues, function(data){
+	bind.toFile('tpl/index.tpl', logged?values:defaultValues, function(data){
         res.writeHead(200, {'Content-Type':'text/html'});
 		res.end(data);
     });
@@ -74,25 +76,71 @@ app.get('/', function(req, res)
  * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
  * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
  */
-app.get('/login', function(req, res) 
+app.get('/logpage', function(req, res) 
 {
-	
-	//check if the session exists
+    var defaultValues={
+        err: null
+    };
+    var values={
+    };
 	if (req.session.user_id != null) 
 	{
     	text = 'You are already logged in';
+        res.end(text);
   	}
 	else
 	{
-		text = 'logged in';
-		req.session.user_id = "Francesco";
-    	//res.redirect('/my_secret_page');
-		
+        bind.toFile('tpl/login.tpl', defaultValues, function(data){
+            res.writeHead(200, {'Content-Type':'text/html'});
+            res.end(data);
+        });		
 	}
+});
+
+/**
+ * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
+ * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
+ */
+app.post('/login', function(req, res) 
+{
 	
-	//write res
-	res.writeHead(200, {'Content-Type': 'text/html'});	
-    res.end(text);
+	console.log("Founded username: " + req.body.username + ", password: " + req.body.password);
+    
+    console.log("Trying to connect to db");
+	pg.connect(connString, function(err, client, done) {
+		
+		console.log("connected to db");
+		//create table	
+		client.query('select * from users', function(err, result) {
+		  done();
+			
+		  if (err){ 
+			   console.error(err); 
+			   res.send("Error " + err); 
+		   }
+		  else{ 
+              var flag=true;
+              console.log(result.rows.length);
+              for(i=0;i<result.rows.length;i++) {
+                    console.log(result.rows[i].name);
+                    if(req.body.username==result.rows[i].name && req.body.password==result.rows[i].password){
+                        req.session.user_id = req.body.username;
+                        flag=false;
+                        bind.toFile('tpl/index.tpl', {name: req.body.username}, function(data){
+                            res.writeHead(200, {'Content-Type':'text/html'});
+                            res.end(data);
+                        });	
+                    }
+              }
+              if(flag){
+                  bind.toFile('tpl/login.tpl', {err: 'Dati inseriti non corretti. Riprovare.'}, function(data){
+                      res.writeHead(200, {'Content-Type':'text/html'});
+                      res.end(data);
+                  });
+              }
+		   }
+		});
+    });
 });
 
 /**

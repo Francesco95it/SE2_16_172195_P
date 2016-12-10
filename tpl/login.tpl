@@ -8,9 +8,14 @@
     <body>
         <div class="mainDiv">
             <h1>Servizio Pasti Trento</h1>
-            <h2>Benvenuto (:name:)</h2>
+            <h2>Accedi al sistema</h2>
             <div class="internalDiv">
-                <a class="btnEnter" href="/logpage">Entra!</a>
+                (:err:)
+                <form method="post" action="/login">
+                    Username: <input type="text" name="username">
+                    Password: <input type="password" name="password">
+                    <input type="submit" value="Submit">
+                </form>
             </div>
         </div>
         

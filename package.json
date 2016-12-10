@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "project pasti",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "pg": "^6.1.0"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "node index.js",
