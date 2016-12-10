@@ -76,7 +76,7 @@ app.get('/', function(req, res)
  * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
  * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
  */
-app.get('/logpage', function(req, res) 
+app.get('/logcheck', function(req, res) 
 {
     var defaultValues={
         err: null
@@ -85,8 +85,7 @@ app.get('/logpage', function(req, res)
     };
 	if (req.session.user_id != null) 
 	{
-    	text = 'You are already logged in';
-        res.end(text);
+    	text = CreateUserMenuTable(req, res);
   	}
 	else
 	{
@@ -167,6 +166,37 @@ app.get('/logout', function(req, res)
 	res.writeHead(200, {'Content-Type': 'text/html'});	
     res.end(text);
 });
+
+function CreateUserMenuTable (req, res){
+    var table='';
+    pg.connect(connString, function(err, client, done) {
+		
+		console.log("connected to db");
+		//create table	
+		client.query('select * from menu where lord=\'launch\';', function(err, result) {
+		  done();
+			
+		  if (err){ 
+			   console.error(err); 
+			   res.send("Error " + err); 
+		   }
+		  else{ 
+              console.log(result.rows.length);
+              text+='<table><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th></tr>';
+              for(i=0;i<result.rows.length;i++) {
+                  text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
+              }
+              text+='</table>';
+              console.log('Tabella: '+text);
+              bind.toFile('tpl/menuchoiche.tpl', {name:req.session.user_id, table: text}, function(data){
+                  res.writeHead(200, {'Content-Type':'text/html'});
+                  res.end(data);
+              });	
+          }
+		});
+    });
+    return table;
+}
 
 
 app.listen(app.get('port'), function() {

@@ -8,9 +8,9 @@
     <body>
         <div class="mainDiv">
             <h1>Servizio Pasti Trento</h1>
-            <h2>Benvenuto (:name:)</h2>
+            <h2>Benvenuto (:name:), scegli il tuo menù settimanale.</h2>
             <div class="internalDiv">
-                <a class="btnEnter" href="/logcheck">Entra!</a>
+                (:table:)
             </div>
         </div>
         
