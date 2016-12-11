@@ -1,16 +1,25 @@
-function showhide(){
-    var insdiv = document.getElementById("insertDiv");
-    var id = document.getElementById("idins");
-    var name = document.getElementById("nameins");
-    var surname = document.getElementById("surnameins");
-    var level = document.getElementById("levelins");
-    var salary = document.getElementById("salaryins");
-    if(insdiv.style.visibility == 'hidden'){
-        id.value = '';
-        name.value = '';
-        surname.value = '';
-        level.value = '';
-        salary.value = '';
-        insdiv.style.visibility = 'visible';
-    } else insdiv.style.visibility = 'hidden';
+var t = 0;
+var x = document.getElementById("menuTable1");
+for (var i = 1, row; row = x.rows[i]; i++) {
+   if (t < 2) {
+       x.rows[i].style.backgroundColor='#F7CDCD';
+   }
+    else if (t < 4)
+    { 
+        x.rows[i].style.backgroundColor='white';
+    }
+    t++;
+    if (t==4) t=0;
+};
+var x = document.getElementById("menuTable2");
+for (var i = 1, row; row = x.rows[i]; i++) {
+   if (t < 2) {
+       x.rows[i].style.backgroundColor='#F7CDCD';
+   }
+    else if (t < 4)
+    { 
+        x.rows[i].style.backgroundColor='white';
+    }
+    t++;
+    if (t==4) t=0;
 };

@@ -39,6 +39,15 @@ app.get('/style.css', function (req, res) {
     res.sendFile('tpl/style.css', {root:__dirname});
 });
 
+function sessionCheck (requ, resu){
+    if (requ.session.user_id==null) {
+        bind.toFile('tpl/index.tpl', {name: 'ospite'}, function(data){
+            resu.writeHead(200, {'Content-Type':'text/html'});
+            resu.end(data);
+        });
+    }
+}
+
 
 /**
  * @brief main page, provides website presentation and a way to log-in or to go into the dashboard if logged in
@@ -92,7 +101,7 @@ app.get('/logcheck', function(req, res)
         bind.toFile('tpl/login.tpl', defaultValues, function(data){
             res.writeHead(200, {'Content-Type':'text/html'});
             res.end(data);
-        });		
+        });
 	}
 });
 
@@ -103,7 +112,7 @@ app.get('/logcheck', function(req, res)
 app.post('/login', function(req, res) 
 {
 	
-	console.log("Founded username: " + req.body.username + ", password: " + req.body.password);
+	console.log("Founded radio: " + req.body.username + ", password: " + req.body.password);
     
     console.log("Trying to connect to db");
 	pg.connect(connString, function(err, client, done) {
@@ -138,6 +147,39 @@ app.post('/login', function(req, res)
                   });
               }
 		   }
+		});
+    });
+});
+
+/**
+ * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
+ * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
+ */
+app.post('/order', function(req, res) 
+{
+    sessionCheck(req, res);
+	//da cercare radio button di tipo giorno+pranzo/cena
+	console.log("Founded launch: " + req.body.lunlaunch + ", " + req.body.marlaunch + ", " + req.body.merlaunch + ", " + req.body.giolaunch + ", " + req.body.venlaunch + ", " + req.body.sablaunch + ", " + req.body.domlaunch + ", " + "dinner: " + req.body.lundinner + ", " + req.body.mardinner + ", " + req.body.merdinner + ", " + req.body.giodinner + ", " + req.body.vendinner + ", " + req.body.sabdinner + ", " + req.body.domdinner);
+    
+    var queryString = "insert into prenotations values ('" + req.session.user_id + "', " + req.body.lunlaunch + ", " + req.body.marlaunch + ", " + req.body.merlaunch + ", " + req.body.giolaunch + ", " + req.body.venlaunch + ", " + req.body.sablaunch + ", " + req.body.domlaunch + ", " + req.body.lundinner + ", " + req.body.mardinner + ", " + req.body.merdinner + ", " + req.body.giodinner + ", " + req.body.vendinner + ", " + req.body.sabdinner + ", " + req.body.domdinner + ")";
+    
+	pg.connect(connString, function(err, client, done) {
+		
+		console.log("connected to db");
+		//create table	
+		client.query(queryString, function(err, result) {
+		  done();
+			
+		  if (err){ 
+			   console.error(err); 
+			   res.send("Error " + err); 
+		   }
+		  else{ 
+              bind.toFile('tpl/successpage.tpl', {}, function(data){
+                  res.writeHead(200, {'Content-Type':'text/html'});
+                  res.end(data);
+                  });
+              }
 		});
     });
 });
@@ -182,16 +224,16 @@ function CreateUserMenuTable (req, res){
 		   }
 		  else{ 
               console.log(result.rows.length);
-              text+='Pranzo:<br><table><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th><th>Scelta</th></tr>';
+              text+='<h3>Pranzo:</h3><br><div class="datagrid"><table id="menuTable1" class="datagrid" style="width: 100%"><thead><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th><th>Scelta</th></tr></thead>';
               for(i=0;i<result.rows.length/2;i++) {
-                  text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
+                  text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+result.rows[i].lord+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
               }
-              text+='</table><br>';
-              text+='Cena:<br><table><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th><th>Scelta</th></tr>';
+              text+='</table></div><br>';
+              text+='<h3>Cena:</h3><br><div class="datagrid"><table id="menuTable2" style="width: 100%"><thead><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th><th>Scelta</th></tr></thead>';
               for(i=result.rows.length/2;i<result.rows.length;i++) {
-                  text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
+                  text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+result.rows[i].lord+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
               }
-              text+='</table>';
+              text+='</table></div>';
               bind.toFile('tpl/menuchoiche.tpl', {name:req.session.user_id, table: text}, function(data){
                   res.writeHead(200, {'Content-Type':'text/html'});
                   res.end(data);

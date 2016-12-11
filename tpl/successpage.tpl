@@ -8,12 +8,12 @@
     <body>
         <div class="mainDiv">
             <h1>Servizio Pasti Trento</h1>
-            <h2>Benvenuto (:name:)</h2>
-            <div class="internalDiv">
-                <a class="btnEnter big" href="/logcheck">Entra!</a>
-            </div>
+            <h2>Prenotazione effettuata con successo!</h2>
         </div>
         
         <script src="scripts.js"></script>
+        <script>
+            window.setTimeout(function(){ window.location = "/"; },3000);
+        </script>
     </body>
 </html>
