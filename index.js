@@ -173,7 +173,7 @@ function CreateUserMenuTable (req, res){
 		
 		console.log("connected to db");
 		//create table	
-		client.query('select * from menu where lord=\'launch\';', function(err, result) {
+		client.query('select * from menu;', function(err, result) {
 		  done();
 			
 		  if (err){ 
@@ -182,12 +182,16 @@ function CreateUserMenuTable (req, res){
 		   }
 		  else{ 
               console.log(result.rows.length);
-              text+='<table><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th></tr>';
-              for(i=0;i<result.rows.length;i++) {
+              text+='Pranzo:<br><table><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th><th>Scelta</th></tr>';
+              for(i=0;i<result.rows.length/2;i++) {
+                  text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
+              }
+              text+='</table><br>';
+              text+='Cena:<br><table><tr><th>Giorno</th><th>Primo</th><th>Secondo</th><th>Contorno</th><th>Calorie</th><th>Scelta</th></tr>';
+              for(i=result.rows.length/2;i<result.rows.length;i++) {
                   text+='<tr><td>'+result.rows[i].giorno+'</td>'+'<td>'+result.rows[i].primo+'</td>'+'<td>'+result.rows[i].secondo+'</td>'+'<td>'+result.rows[i].contorno+'</td>'+'<td>'+result.rows[i].calorie+'</td>'+'<td>'+'<input type="radio" name="'+result.rows[i].giorno+'" value="'+result.rows[i].nvariante+'"/>'+'</td>'+'</tr>';
               }
               text+='</table>';
-              console.log('Tabella: '+text);
               bind.toFile('tpl/menuchoiche.tpl', {name:req.session.user_id, table: text}, function(data){
                   res.writeHead(200, {'Content-Type':'text/html'});
                   res.end(data);
