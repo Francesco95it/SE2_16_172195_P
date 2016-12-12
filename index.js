@@ -187,31 +187,13 @@ app.post('/order', function(req, res)
     });
 });
 
-/**
- * @brief log out page
- * @return a page with notification that user is logged out, or a page which says that the user is already logged out.
- */
-app.get('/logout', function(req, res) 
-{
-	var text = "";
-	
-	//check if the session exists
-	if (req.session.user_id !=null) 
-	{
-    	text = 'logged out';
-		req.session.user_id = null;
-  	}
-	else
-	{
-		text = 'You are already logged out';
-		
-	}
-	
-	//write res
-	res.writeHead(200, {'Content-Type': 'text/html'});	
-    res.end(text);
-});
 
+/**
+ * @brief creates the table for displaying the available menu of the week and the possibility to choose it
+ * @param req: the request of the get/post action
+ * @param res: the response of the get/post action
+ * @return a page in which the table is displayed and the user can choose what to order
+ */
 function CreateUserMenuTable (req, res){
     var text='';
     pg.connect(connString, function(err, client, done) {
@@ -246,6 +228,12 @@ function CreateUserMenuTable (req, res){
     });
 }
 
+/**
+ * @brief creates the table for displaying the prenotations sended by the customers
+ * @param req: the request of the get/post action
+ * @param res: the response of the get/post action
+ * @return a page in which the table is displayed and the admin can see all the data
+ */
 function CreateAdminPrenotationTable (req, res){
     var text='';
     pg.connect(connString, function(err, client, done) {
