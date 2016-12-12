@@ -16,6 +16,11 @@
                     Password: <input type="password" name="password">
                     <input type="submit" value="Submit">
                 </form>
+                <br>
+                TIP: <br>
+                -Log in as admin with username: admin password: 12345<br>
+                -Log in as customer with username: customer1 password: 12345 <br>
+                 or username:customer2 password:123
             </div>
         </div>
         
