@@ -13,8 +13,8 @@
                 <form name="dataForm" method="post" action="/order">
                     (:table:)
                     <br>
-                    <button class="btnEnter medium" onClick="sendData()">Submit</button>
                 </form>
+                <button class="btnEnter medium" onClick="sendData()">Submit</button>
             </div>
         </div>
         
@@ -26,7 +26,7 @@
                 for (i=0; i<x.length; i++){
                     if (x[i].checked) n+=1;
                 }
-                if n==14 //document.dataForm.submit();
+                if (n==14) document.dataForm.submit();
                 else alert("E' obbligatorio compilare il menu per ogni giorno!");
                 
             }

@@ -50,8 +50,8 @@ function sessionCheck (requ, resu){
 
 
 /**
- * @brief main page, provides website presentation and a way to log-in or to go into the dashboard if logged in
- * @return the index.tpl page like it is normally
+ * @brief main page, provides website presentation and a way to log-in or to go into the dashboard/menu choiche page if logged in
+ * @return the index.tpl page like it is normally, with the name of the user logged in
  */
 app.get('/', function(req, res) 
 {
@@ -82,8 +82,8 @@ app.get('/', function(req, res)
 });
 
 /**
- * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
- * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
+ * @brief checks wheter the user is logged in ad administrator, customer or not logged in at all.
+ * @return a page for logging if the user is not yet logged in, or the dashboard for the admin or the page for choosing the menu
  */
 app.get('/logcheck', function(req, res) 
 {
@@ -94,7 +94,10 @@ app.get('/logcheck', function(req, res)
     };
 	if (req.session.user_id != null) 
 	{
-    	text = CreateUserMenuTable(req, res);
+        if(req.session.user_id == 'admin'){
+            CreateAdminPrenotationTable(req, res);
+        }
+        else CreateUserMenuTable(req, res);
   	}
 	else
 	{
@@ -106,8 +109,8 @@ app.get('/logcheck', function(req, res)
 });
 
 /**
- * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
- * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
+ * @brief log in page, this page will create a session if the user exists in the database
+ * @return the main page of the website or the log in page if user data are wrong/not existing
  */
 app.post('/login', function(req, res) 
 {
@@ -126,7 +129,7 @@ app.post('/login', function(req, res)
 			   console.error(err); 
 			   res.send("Error " + err); 
 		   }
-		  else{ 
+		  else{
               var flag=true;
               console.log(result.rows.length);
               for(i=0;i<result.rows.length;i++) {
@@ -152,8 +155,8 @@ app.post('/login', function(req, res)
 });
 
 /**
- * @brief log in page, this page will create a session if it is not present ( i.e. it will log in a user)
- * @return a page with notification that auser is logged in, or a page which says that the user is already logged in.
+ * @brief takes the menu choice for the whole week for the user logged in and inserts it in the database
+ * @return a page which notifies if the operation is ended successfully or not
  */
 app.post('/order', function(req, res) 
 {
@@ -210,7 +213,7 @@ app.get('/logout', function(req, res)
 });
 
 function CreateUserMenuTable (req, res){
-    var table='';
+    var text='';
     pg.connect(connString, function(err, client, done) {
 		
 		console.log("connected to db");
@@ -241,7 +244,36 @@ function CreateUserMenuTable (req, res){
           }
 		});
     });
-    return table;
+}
+
+function CreateAdminPrenotationTable (req, res){
+    var text='';
+    pg.connect(connString, function(err, client, done) {
+		
+		console.log("connected to db");
+		//create table	
+		client.query('select * from prenotations;', function(err, result) {
+		  done();
+			
+		  if (err){ 
+			   console.error(err); 
+			   res.send("Error " + err); 
+		   }
+		  else{ 
+              console.log(result.rows.length);
+              text+='<h3>Prenotazioni:</h3><br><div class="datagrid"><table class="datagrid" style="width: 100%; text-align: center"><thead><tr><th>Utente</th><th colspan="2">Lunedì</th><th colspan="2">Martedì</th><th colspan="2">Mercoledì</th><th colspan="2">Giovedì</th><th colspan="2">Venerdì</th><th colspan="2">Sabato</th><th colspan="2">Domenica</th></tr>';
+              text+='<tr><th></th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th></tr></thead>';
+              for(i=0;i<result.rows.length/2;i++) {
+                  text+='<tr><td>'+result.rows[i].name+'</td>'+'<td>'+result.rows[i].lunlaunch+'</td>'+'<td>'+result.rows[i].lundinner+'</td>'+'<td>'+result.rows[i].marlaunch+'</td>'+'<td>'+result.rows[i].mardinner+'</td>'+'<td>'+result.rows[i].merlaunch+'</td>'+'<td>'+result.rows[i].merdinner+'</td>'+'<td>'+result.rows[i].giolaunch+'</td>'+'<td>'+result.rows[i].giodinner+'</td>'+'<td>'+result.rows[i].venlaunch+'</td>'+'<td>'+result.rows[i].vendinner+'</td>'+'<td>'+result.rows[i].sablaunch+'</td>'+'<td>'+result.rows[i].sabdinner+'</td>'+'<td>'+result.rows[i].domlaunch+'</td>'+'<td>'+result.rows[i].domdinner+'</td>'+'</tr>';
+              }
+              text+='</table></div><br>';
+              bind.toFile('tpl/adminpage.tpl', {table: text}, function(data){
+                  res.writeHead(200, {'Content-Type':'text/html'});
+                  res.end(data);
+            });
+          }
+		});
+    });
 }
 
 
