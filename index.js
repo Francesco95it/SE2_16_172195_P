@@ -251,7 +251,7 @@ function CreateAdminPrenotationTable (req, res){
               console.log(result.rows.length);
               text+='<h3>Prenotazioni:</h3><br><div class="datagrid"><table class="datagrid" style="width: 100%; text-align: center"><thead><tr><th>Utente</th><th colspan="2">Lunedì</th><th colspan="2">Martedì</th><th colspan="2">Mercoledì</th><th colspan="2">Giovedì</th><th colspan="2">Venerdì</th><th colspan="2">Sabato</th><th colspan="2">Domenica</th></tr>';
               text+='<tr><th></th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th><th>Pranzo</th><th>Cena</th></tr></thead>';
-              for(i=0;i<result.rows.length/2;i++) {
+              for(i=0;i<result.rows.length;i++) {
                   text+='<tr><td>'+result.rows[i].name+'</td>'+'<td>'+result.rows[i].lunlaunch+'</td>'+'<td>'+result.rows[i].lundinner+'</td>'+'<td>'+result.rows[i].marlaunch+'</td>'+'<td>'+result.rows[i].mardinner+'</td>'+'<td>'+result.rows[i].merlaunch+'</td>'+'<td>'+result.rows[i].merdinner+'</td>'+'<td>'+result.rows[i].giolaunch+'</td>'+'<td>'+result.rows[i].giodinner+'</td>'+'<td>'+result.rows[i].venlaunch+'</td>'+'<td>'+result.rows[i].vendinner+'</td>'+'<td>'+result.rows[i].sablaunch+'</td>'+'<td>'+result.rows[i].sabdinner+'</td>'+'<td>'+result.rows[i].domlaunch+'</td>'+'<td>'+result.rows[i].domdinner+'</td>'+'</tr>';
               }
               text+='</table></div><br>';
