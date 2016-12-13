@@ -5,6 +5,12 @@
 .mainDiv{
 }
 
+.footer{
+    position:absolute;
+    bottom:5%;
+    right:5%;
+}
+
 html, body {
     height:100%;
 }

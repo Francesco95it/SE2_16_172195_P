@@ -16,5 +16,8 @@
                     <br>
             </div>
         </div>
+        <div class="footer">
+            <a class="btnEnter medium" href="/logout">Logout</a>
+        </div>
     </body>
 </html>
