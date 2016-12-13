@@ -264,6 +264,20 @@ function CreateAdminPrenotationTable (req, res){
     });
 }
 
+/**
+ * @brief log out page
+ * @return a page with notification that user is logged out, or a page which says that the user is already logged out.
+ */
+app.get('/logout', function(req, res) 
+{
+    req.session.user_id = null;
+    bind.toFile('tpl/index.tpl', {name: 'ospite'}, function(data){
+        res.writeHead(200, {'Content-Type':'text/html'});
+        res.end(data);
+    });	
+	
+});
+
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
