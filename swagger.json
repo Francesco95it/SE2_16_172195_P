@@ -1,0 +1,108 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Servizio Pasti Trento",
+        "description": "Definition of API in the project",
+        "version": "1.0.0"
+    },
+    "host": "vast-shelf-49781.herokuapp.com",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/",
+    "produces": [
+        "application/json",
+        "text"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "paths": {
+        "/": {
+            "get": {
+                "summary": "Presents the website",
+                "description": "it shows a page with the name of the user and a button",
+                "responses": {
+                    "200": {
+                        "description": "Succesfully returned"
+                    },
+                    "500": {
+                        "description": "Generic error"
+                    }
+                }
+            }
+        },
+        "/logcheck": {
+            "get": {
+                "summary": "Checks the session user_id",
+                "description": "Shows the login page if the user_id is null, the administration dashboard if the admin is logged in or the menu choice page if a customer is logged in",
+                "responses": {
+                    "200": {
+                        "description": "Succesfully returns the right page"
+                    },
+                    "500": {
+                        "description": "Generic error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Creates a session",
+                "description": "Requires username and password, checks wheter the user exists in the database. If exists, creates the session, else returns login page with an error.",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "formData",
+                        "description": "username",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "password",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Succesfully logged in or user not found"
+                    },
+                    "500": {
+                        "description": "Generic or database error"
+                    }
+                }
+            }
+        },
+        "/order": {
+            "post": {
+                "summary": "Orders weekly menu",
+                "description": "Requires the whole form of the weekly menu to be compiled and inserts the order in the database",
+                "responses": {
+                    "200": {
+                        "description": "Succesfully inserted the order into database"
+                    },
+                    "500": {
+                        "description": "Generic or database error"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "summary": "Destroys the current session",
+                "description": "Sets the session user_id to null and redirects to the main page",
+                "responses": {
+                    "200": {
+                        "description": "Succesfully destroyed the session and returned the main page"
+                    },
+                    "500": {
+                        "description": "Generic error"
+                    }
+                }
+            }
+        }
+    }
+}
