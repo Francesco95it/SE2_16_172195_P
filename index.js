@@ -56,10 +56,11 @@ function sessionCheck (requ, resu){
 app.get('/', function(req, res) 
 {
     var defaultValues={
-        name:'ospite'
+        name:'ospite',
+        visibility: 'hidden'
     };
     var values={
-
+        
     };
     var logged;
 	//check if the session exists
@@ -67,7 +68,8 @@ app.get('/', function(req, res)
 		//print the greetings with the content of the session
         logged = true;
 		values={
-            name: req.session.user_id
+            name: req.session.user_id,
+            visibility: 'visible'
         };
 	}
 	else {
@@ -137,7 +139,7 @@ app.post('/login', function(req, res)
                     if(req.body.username==result.rows[i].name && req.body.password==result.rows[i].password){
                         req.session.user_id = req.body.username;
                         flag=false;
-                        bind.toFile('tpl/index.tpl', {name: req.body.username}, function(data){
+                        bind.toFile('tpl/index.tpl', {visibility: 'visible', name: req.body.username}, function(data){
                             res.writeHead(200, {'Content-Type':'text/html'});
                             res.end(data);
                         });	
@@ -271,7 +273,7 @@ function CreateAdminPrenotationTable (req, res){
 app.get('/logout', function(req, res) 
 {
     req.session.user_id = null;
-    bind.toFile('tpl/index.tpl', {name: 'ospite'}, function(data){
+    bind.toFile('tpl/index.tpl', {visibility:'hidden', name: 'ospite'}, function(data){
         res.writeHead(200, {'Content-Type':'text/html'});
         res.end(data);
     });	

@@ -14,7 +14,7 @@
             </div>
         </div>
         
-        <div class="footer">
+        <div class="footer" style="visibility: (:visibility:);">
             <a class="btnEnter medium" href="/logout">Logout</a>
         </div>
         
